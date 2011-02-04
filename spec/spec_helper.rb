@@ -1,5 +1,5 @@
 require 'rspec'
-require ::File.dirname(__FILE__) + '/../lib/dough_boy.rb'
+require ::File.dirname(__FILE__) + '/../lib/doughboy.rb'
 
 Rspec.configure do |config|
 end
