@@ -1,0 +1,10 @@
+require 'autotest/fsevent'
+
+require 'autotest_notification'
+SPEAKING = true
+DOOM_EDITION = true
+BUUF = false
+PENDING = false
+STICKY = false
+SUCCESS_SOUND = ''
+FAILURE_SOUND = ''
