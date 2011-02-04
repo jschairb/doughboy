@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = ["joshua.schairbaum@gmail.com"]
   s.homepage    = ""
   s.summary     = %q{Easily run command-line programs. This }
-  s.description = %q{TODO: Write a gem description}
+  s.description = %q{Doughboy is a Ruby library that strives to enable developers to easily make subprocessed shell calls.}
 
   s.rubyforge_project = "dough_boy"
 
