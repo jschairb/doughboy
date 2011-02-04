@@ -38,18 +38,38 @@ module DoughBoy
       end
 
       context "with a string of executable and argument" do
+        before(:each) do
+          @command_string = "ps aux"
+        end
+
         it "assigns the executable" do
-          command = Command.with_exec("ifconfig")
-          command.executable.should == `which ifconfig`.strip
+          command = Command.with_exec(@command_string)
+          command.executable.should == `which ps`.strip
         end
 
         it "assigns the arguments" do
-          command = Command.with_exec("ps aux")
+          command = Command.with_exec(@command_string)
           command.arguments.should == "aux"
+        end
+      end
+
+      context "with a string of executable, arguments, and options" do
+        before(:each) do
+          @command_string = "mi -r 212984"
+        end
+
+        it "assigns the executable" do
+          command = Command.with_exec(@command_string)
+          command.executable.should == `which mi`.strip
+        end
+
+        it "assigns the arguments" do
+          command = Command.with_exec(@command_string)
+          command.arguments.should == "212984"
         end
 
         it "assigns the options" do
-          command = Command.with_exec("mi -r")
+          command = Command.with_exec(@command_string)
           command.options.should == ["-r"]
         end
       end
@@ -84,6 +104,11 @@ module DoughBoy
 
         command = Command.new(:executable => "ruby")
         command.executable.should == ruby
+      end
+
+      it "sets the value sent if no path could be determined" do
+        command = Command.new(:executable => "noexist")
+        command.executable.should == "noexist"
       end
     end
 

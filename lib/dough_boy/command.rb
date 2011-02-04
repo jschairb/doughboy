@@ -26,7 +26,8 @@ module DoughBoy
 
     def executable=(value)
       return nil if value.nil?
-      @executable = `which #{value}`.strip
+      full_path = `which #{value}`.strip
+      @executable = full_path != "" ? full_path : value
     end
 
     def options=(value)
@@ -40,12 +41,13 @@ module DoughBoy
 
     private
     def self.parse_command(command)
-      split_command = command.split
+      split_command = command.split(" ")
       parsed_command = { }
+      args_and_opts = split_command[1..(split_command.size-1)]
+
       parsed_command[:executable] = split_command[0]
-# TODO: parse args for lack of something
-# TODO: parse opts for - commands.select { |c| c.include?("-")
-      parsed_command[:arguments] = split_command[1]
+      parsed_command[:arguments] = args_and_opts.select { |t| !t.include?("-") }.join(" ")
+      parsed_command[:options]   = args_and_opts.select { |t| t.include?("-") }
       parsed_command
     end
 
