@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    doughboy (0.0.3)
+    doughboy (0.0.4)
       open4 (~> 1.0.1)
 
 GEM

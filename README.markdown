@@ -8,7 +8,7 @@ Usage
 
 Doughboy provides a compossible interface to crafting shell commands.
 
-    command = Doughboy.with_exec("ruby").with_options(["-v"])
+    command = Doughboy.with_exec("ruby -v")
     command.run!
 
 Commands components can be set directly on any object.
@@ -20,15 +20,11 @@ The preferred method is to use the composable chain methods.
 Command Components
 ------------------
 
-Each command is composed of 3 separate components: executable, options, arguments.
+Each command is composed of 2 components, executable and arguments.
 
 ### Executable
 
 When this component is set, the full-path is captured. If no path information could be determined, the executable passed will be used.
-
-### Options
-
-Options are command line switches that either start w/ "-" or "--". 
 
 ### Arguments
 

@@ -18,15 +18,9 @@ module Doughboy
           command.executable.should_not be_nil
         end
 
-        it "sets the options" do
-          options = "-r -i"
-          command = Command.new(:options => options)
-          command.options.should_not be_nil
-        end
-
         # Command.with_exec("python setup.py develop).run
-        # Command.with_exec("python").with_option("-r").with_arg("123456").run
-        # Command.with_exec("mi").with_options([]).with_args([]).run
+        # Command.with_exec("python").with_arg("123456").run
+        # Command.with_exec("mi").with_args([]).run
         # Command.with_exec("python") do |input|
         #   input.puts("exit()")
         # end
@@ -50,11 +44,11 @@ module Doughboy
 
         it "assigns the arguments" do
           command = Command.with_exec(@command_string)
-          command.arguments.should == "aux"
+          command.arguments.should == ["aux"]
         end
       end
 
-      context "with a string of executable, arguments, and options" do
+      context "with a string of executable, arguments" do
         before(:each) do
           @command_string = "mi -r 212984"
         end
@@ -66,12 +60,7 @@ module Doughboy
 
         it "assigns the arguments" do
           command = Command.with_exec(@command_string)
-          command.arguments.should == "212984"
-        end
-
-        it "assigns the options" do
-          command = Command.with_exec(@command_string)
-          command.options.should == ["-r"]
+          command.arguments.should == ["-r", "212984"]
         end
       end
 
@@ -92,8 +81,8 @@ module Doughboy
     end
 
     describe "#command" do
-      it "joins the executable, options, and arguments" do
-        full_command = "/bin/ps  aux"
+      it "joins the executable and arguments" do
+        full_command = "/bin/ps aux"
         command = Command.new(:executable => "ps", :options => "", :arguments => "aux")
         command.command.should == full_command
       end
@@ -119,22 +108,6 @@ module Doughboy
       end
     end
 
-    describe "#options=" do
-      context "with an array of options" do
-        it "sets the options as an array" do
-          options = ["-r", "-i"]
-          command = Command.new(:options => options)
-          command.options.should == options
-        end
-      end
-
-      context "with a string of options" do
-        options = "-r -i"
-        command = Command.new(:options => options)
-        command.options.should == ["-r", "-i"]
-      end
-    end
-
     describe "#run!" do
       it "runs the command" do
         full_command = "/bin/ps  aux"
@@ -147,7 +120,7 @@ module Doughboy
       end
 
       it "returns an output object" do
-        command = Command.new(:executable => "ps", :options => "", :arguments => "aux")
+        command = Command.new(:executable => "ps", :arguments => "aux")
         command.run!.should be_kind_of(Output)
       end
     end
