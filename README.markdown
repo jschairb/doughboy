@@ -32,7 +32,7 @@ When this component is set, the full-path is captured. If no path information co
 
 ### Arguments
 
-Arguments are items that are passed to the executable. They might be a list of ip addresses or files.
+Arguments are items that are passed to the executable. They might be a list of switches, ip addresses or files.
 
 Origin of the Name
 ------------------
