@@ -4,6 +4,7 @@ module DoughBoy
   describe Command do
     describe ".new" do
       context "with a string argument" do
+        it "sets the executable"
       end
 
       context "with a hash argument" do

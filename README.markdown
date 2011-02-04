@@ -45,3 +45,8 @@ Author
 ------
 
 Joshua Schairbaum \o\ joshua.schairbaum@gmail.com /o/ @jschairb 
+
+License
+-------
+
+See LICENSE file.
