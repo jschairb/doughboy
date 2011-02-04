@@ -2,21 +2,22 @@ module Doughboy
   class Command
     attr_accessor :arguments, :executable
 
-    def initialize(*args)
-      if args.any?
-        local_args = args.first
+    # Command.new
+    # Command.new("python setup.py develop")
+    # Command.new("python", "setup.py develop")
+    # Command.new(:executable => "python", :arguments => "setup.py develop")
 
-        %w( arguments executable ).each do |arg|
-          self.send("#{arg}=", local_args[arg.intern])
-        end
-      end
+    def initialize(*args)
+      return self if args.empty?
+      parsed_args = args.first.is_a?(Hash) ? args.first : parse_string_args(args)
+
+      self.executable = parsed_args[:executable]
+      self.arguments  = parsed_args[:arguments]
     end
 
-    def self.with_exec(command)
-      parsed_command = parse_command(command)
-
-      new( :executable     => parsed_command[:executable],
-           :arguments      => parsed_command[:arguments])
+    def self.with_exec(*args)
+      command = new(*args)
+      command.run
     end
 
     def command
@@ -25,16 +26,17 @@ module Doughboy
 
     def executable=(value)
       return nil if value.nil?
+
       full_path = `which #{value}`.strip
       @executable = full_path != "" ? full_path : value
     end
 
-    def run!
+    def run
       Output.new( Open4::popen4(command) )
     end
 
     private
-    def self.parse_command(command)
+    def self.parse_executable(command)
       split_command = command.split(" ")
       parsed_command = { }
 
@@ -43,5 +45,12 @@ module Doughboy
       parsed_command
     end
 
+    def parse_string_args(args)
+      if args.size == 1
+        self.class.parse_executable(args.first)
+      else
+        { :executable => args.first, :arguments => args[1]}
+      end
+    end
   end
 end

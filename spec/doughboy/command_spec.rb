@@ -3,19 +3,46 @@ require 'spec_helper'
 module Doughboy
   describe Command do
     describe ".new" do
-      context "with a string argument" do
-        it "sets the executable"
+      context "with no arugments" do
+        it "does not error" do
+          lambda { Command.new }.should_not raise_exception
+        end
       end
 
-      context "with a hash argument" do
+      context "with a single string argument" do
+        it "sets the executable" do
+          command = Command.new("python setup.py develop")
+          command.executable.should_not be_nil
+        end
+
         it "sets the arguments" do
-          command = Command.new(:arguments => "setup.py develop")
+          command = Command.new("python setup.py develop")
+          command.arguments.should_not be_nil
+        end
+      end
+
+      context "with a double string argument" do
+        it "sets the executable" do
+          command = Command.new("python", "setup.py develop")
+          command.executable.should_not be_nil
+        end
+
+        it "sets the arguments" do
+          command = Command.new("python", "setup.py develop")
           command.arguments.should_not be_nil
         end
 
+      end
+
+      context "with a hash argument" do
         it "sets the executeable" do
           command = Command.new(:executable => "python")
           command.executable.should_not be_nil
+        end
+
+        it "sets the arguments" do
+          command = Command.new(:arguments => "setup.py develop")
+          command.arguments.should_not be_nil
         end
 
         # Command.with_exec("python setup.py develop).run
@@ -28,47 +55,11 @@ module Doughboy
     end
 
     describe ".with_exec" do
-      it "returns a Command" do
-        Command.with_exec("ruby").should be_kind_of(Command)
+
+      it "returns a Output" do
+        Command.with_exec("ruby").should be_kind_of(Output)
       end
 
-      context "with a string of executable and argument" do
-        before(:each) do
-          @command_string = "ps aux"
-        end
-
-        it "assigns the executable" do
-          command = Command.with_exec(@command_string)
-          command.executable.should == `which ps`.strip
-        end
-
-        it "assigns the arguments" do
-          command = Command.with_exec(@command_string)
-          command.arguments.should == ["aux"]
-        end
-      end
-
-      context "with a string of executable, arguments" do
-        before(:each) do
-          @command_string = "mi -r 212984"
-        end
-
-        it "assigns the executable" do
-          command = Command.with_exec(@command_string)
-          command.executable.should == `which mi`.strip
-        end
-
-        it "assigns the arguments" do
-          command = Command.with_exec(@command_string)
-          command.arguments.should == ["-r", "212984"]
-        end
-      end
-
-      context "with an executable" do
-        it "assigns the executable" do
-          Command.with_exec("ruby").executable.should include("ruby")
-        end
-      end
     end
 
     describe "#arguments=" do
@@ -89,7 +80,7 @@ module Doughboy
 
       it "returns them in the proper order" do
         python = `which python`.strip
-        command = Command.with_exec("python mbu_information.py -r 218298")
+        command = Command.new("python mbu_information.py -r 218298")
         command.command.should == "#{python} mbu_information.py -r 218298"
       end
     end
@@ -108,6 +99,23 @@ module Doughboy
       end
     end
 
+    describe "#run" do
+      it "runs the command" do
+        full_command = "/bin/ps  aux"
+        command = Command.new()
+        command.stub!(:command).and_return(full_command)
+
+        Open4.should_receive(:popen4).with(full_command).
+          and_return([1234, StringIO.new, StringIO.new, StringIO.new])
+        command.run
+      end
+
+      it "returns an output object" do
+        command = Command.new(:executable => "ps", :arguments => "aux")
+        command.run.should be_kind_of(Output)
+      end
+    end
+
     describe "#run!" do
       it "runs the command" do
         full_command = "/bin/ps  aux"
@@ -116,12 +124,12 @@ module Doughboy
 
         Open4.should_receive(:popen4).with(full_command).
           and_return([1234, StringIO.new, StringIO.new, StringIO.new])
-        command.run!
+        command.run
       end
 
       it "returns an output object" do
         command = Command.new(:executable => "ps", :arguments => "aux")
-        command.run!.should be_kind_of(Output)
+        command.run.should be_kind_of(Output)
       end
     end
   end
