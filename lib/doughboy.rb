@@ -1,7 +1,7 @@
 require 'open4'
 
-require 'dough_boy/command'
-require 'dough_boy/output'
+require 'doughboy/command'
+require 'doughboy/output'
 
-module DoughBoy
+module Doughboy
 end

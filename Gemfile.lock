@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dough_boy (0.0.1)
+    doughboy (0.0.3)
       open4 (~> 1.0.1)
 
 GEM
@@ -22,5 +22,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  dough_boy!
+  doughboy!
   rspec (~> 2.4.0)
