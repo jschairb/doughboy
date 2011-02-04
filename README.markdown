@@ -8,7 +8,7 @@ Usage
 
 Doughboy provides a compossible interface to crafting shell commands.
 
-    command = Doughboy::Command.with_exec("ruby").with_options(["-v"])
+    command = Doughboy.with_exec("ruby").with_options(["-v"])
     command.run!
 
 Commands components can be set directly on any object.

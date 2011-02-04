@@ -97,6 +97,12 @@ module Doughboy
         command = Command.new(:executable => "ps", :options => "", :arguments => "aux")
         command.command.should == full_command
       end
+
+      it "returns them in the proper order" do
+        python = `which python`.strip
+        command = Command.with_exec("python mbu_information.py -r 218298")
+        command.command.should == "#{python} mbu_information.py -r 218298"
+      end
     end
 
     describe "#executable=" do

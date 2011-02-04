@@ -1,27 +1,32 @@
 module Doughboy
   class Command
-    attr_accessor :arguments, :executable, :options
+    attr_accessor :arguments, :executable, :full_arguments, :options
 
     def initialize(*args)
       if args.any?
         local_args = args.first
-        self.arguments  = local_args[:arguments]
-        self.executable = local_args[:executable]
-        self.options    = local_args[:options]
+
+        %w( arguments executable options full_arguments).each do |arg|
+          self.send("#{arg}=", local_args[arg.intern])
+        end
       end
     end
 
     def self.with_exec(command)
       parsed_command = parse_command(command)
-      executable = parsed_command[:executable]
-      arguments  = parsed_command[:arguments]
-      options    = parsed_command[:options]
 
-      new(:executable => executable, :arguments => arguments, :options => options)
+      new( :executable     => parsed_command[:executable],
+           :arguments      => parsed_command[:arguments],
+           :options        => parsed_command[:options],
+           :full_arguments => parsed_command[:full_arguments])
     end
 
     def command
-      [executable, options, arguments].join(" ")
+      if full_arguments
+        [executable, full_arguments].join(" ")
+      else
+        [executable, options, arguments].join(" ")
+      end
     end
 
     def executable=(value)
@@ -45,6 +50,7 @@ module Doughboy
       parsed_command = { }
       args_and_opts = split_command[1..(split_command.size-1)]
 
+      parsed_command[:full_arguments] = args_and_opts
       parsed_command[:executable] = split_command[0]
       parsed_command[:arguments] = args_and_opts.select { |t| !t.include?("-") }.join(" ")
       parsed_command[:options]   = args_and_opts.select { |t| t.include?("-") }
