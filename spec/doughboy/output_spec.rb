@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module DoughBoy
+module Doughboy
   describe Output do
     describe ".new" do
       before(:each) do

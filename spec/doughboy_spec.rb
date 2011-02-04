@@ -1,4 +1,4 @@
 require 'spec_helper'
 
-describe DoughBoy do
+describe Doughboy do
 end

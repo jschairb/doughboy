@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module DoughBoy
+module Doughboy
   describe Command do
     describe ".new" do
       context "with a string argument" do
