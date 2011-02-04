@@ -1,4 +1,4 @@
-module DoughBoy
+module Doughboy
   class Command
     attr_accessor :arguments, :executable, :options
 

@@ -1,4 +1,4 @@
-module DoughBoy
+module Doughboy
   class Output
     attr_accessor :pid, :stdin, :stdout, :stderr
 
